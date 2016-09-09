@@ -1,9 +1,11 @@
 const redux = require('redux')
 const reactRedux = require('react-redux')
+const { shows } = require('../public/data')
 
 const SET_SEARCH_TERM = 'setSearchTerm'
 const initalState = {
-  searchTerm: ''
+  searchTerm: '',
+  shows
 }
 const rootReducer = (state = initalState, action) => {
   switch (action.type) {
@@ -20,9 +22,16 @@ const reduceSearchTerm = (state, action) => {
   return newState
 }
 
-const store = redux.createStore(rootReducer)
+const store = redux.createStore(rootReducer, initalState, redux.compose(
+  typeof window === 'object' && typeof window.devToolsExtension !== 'undefined' ? window.devToolsExtension() : (f) => f
+))
 
-const mapStateToProps = (state) => ({ searchTerm : state.searchTerm })
+const mapStateToProps = (state) => {
+  return {
+    searchTerm: state.searchTerm,
+    shows: state.shows
+  }
+}
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -34,4 +43,4 @@ const mapDispatchToProps = (dispatch) => {
 
 const connector = reactRedux.connect(mapStateToProps, mapDispatchToProps)
 
-module.exports = { connector, store }
+module.exports = { connector, store, rootReducer }

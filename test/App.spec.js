@@ -6,6 +6,8 @@ const Search = require('../js/Search')
 const { shallow, mount } = require('enzyme')
 const { shows } = require('../public/data')
 const ShowCard = require('../js/ShowCard')
+const { store, rootReducer } = require('../js/Store')
+
 
 describe('<Search /> ', () => {
     it('should render brand', () => {
@@ -28,3 +30,14 @@ describe('<Search /> ', () => {
     })
 
   })
+
+describe('Store', () => {
+  it('should bootstrap', () => {
+      const state = rootReducer(undefined, {type: '@@redux/INIT'})
+      expect(state).to.deep.equal({ searchTerm: '' })
+    })
+  it('should handle setSearchTerm actions', () => {
+    const state = rootReducer({ searchTerm: 'some random string' }, { type: 'setSearchTerm', value: 'correct string'})
+    expect(state).to.deep.equal({ searchTerm: 'correct string' })
+  })
+})
